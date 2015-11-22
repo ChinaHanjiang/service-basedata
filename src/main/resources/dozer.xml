@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+    <configuration>
+        <custom-converters> <!-- these are always bi-directional -->
+
+            <converter type="hu.tilos.radio.backend.converters.EnumDecoder">
+                <class-a>java.lang.Integer</class-a>
+                <class-b>hu.radio.tilos.model.type.ShowType</class-b>
+            </converter>
+            <converter type="hu.tilos.radio.backend.converters.EnumDecoder">
+                <class-a>java.lang.Integer</class-a>
+                <class-b>hu.radio.tilos.model.type.ShowStatus</class-b>
+            </converter>
+
+        </custom-converters>
+    </configuration>
+
+    <mapping map-null="false">
+        <class-a map-get-method="get" map-set-method="put">org.bson.BSONObject</class-a>
+        <class-b>hu.tilos.radio.backend.contribution.Contribution</class-b>
+        <field>
+            <a key="show">this</a>
+            <b>show</b>
+        </field>
+    </mapping>
+
+    <mapping map-null="false">
+        <class-a map-get-method="get" map-set-method="put">org.bson.BSONObject</class-a>
+        <class-b>hu.tilos.radio.backend.author.AuthorListElement</class-b>
+        <field>
+            <a key="_id">this</a>
+            <b>id</b>
+        </field>
+        <field>
+            <a key="contributions">this</a>
+            <b>contributions</b>
+        </field>
+    </mapping>
+
+    <mapping map-null="false">
+        <class-a map-get-method="get" map-set-method="put">org.bson.BSONObject</class-a>
+        <class-b>hu.tilos.radio.backend.author.AuthorWithContribution</class-b>
+        <field>
+            <a key="_id">this</a>
+            <b>id</b>
+        </field>
+    </mapping>
+
+    <mapping map-null="false">
+        <class-a map-get-method="get" map-set-method="put">org.bson.BSONObject</class-a>
+        <class-b>hu.tilos.radio.backend.author.AuthorDetailed</class-b>
+        <field>
+            <a key="_id">this</a>
+            <b>id</b>
+        </field>
+        <field-exclude>
+            <a key="email">this</a>
+            <b>email</b>
+        </field-exclude>
+    </mapping>
+
+    <mapping map-null="false">
+        <class-a map-get-method="get" map-set-method="put">org.bson.BSONObject</class-a>
+        <class-b>hu.tilos.radio.backend.contribution.ShowReference</class-b>
+        <field custom-converter="hu.tilos.radio.backend.converters.ReferenceDecoder">
+            <a key="ref">this</a>
+            <b>id</b>
+        </field>
+    </mapping>
+
+    <mapping map-null="false">
+        <class-a map-get-method="get" map-set-method="put">org.bson.BSONObject</class-a>
+        <class-b>hu.tilos.radio.backend.contribution.ShowContribution</class-b>
+        <field>
+            <a key="author">this</a>
+            <b>author</b>
+        </field>
+    </mapping>
+
+
+    <mapping map-null="false">
+        <class-a map-get-method="get" map-set-method="put">org.bson.BSONObject</class-a>
+        <class-b>hu.tilos.radio.backend.contribution.AuthorReference</class-b>
+        <field custom-converter="hu.tilos.radio.backend.converters.ReferenceDecoder">
+            <a key="ref">this</a>
+            <b>id</b>
+        </field>
+    </mapping>
+
+    <mapping map-null="false">
+        <class-a map-get-method="get" map-set-method="put">org.bson.BSONObject</class-a>
+        <class-b>hu.tilos.radio.backend.show.ShowSimple</class-b>
+        <field>
+            <a key="_id">this</a>
+            <b>id</b>
+        </field>
+        <field-exclude>
+            <a key="id">this</a>
+            <b>id</b>
+        </field-exclude>
+        <field custom-converter="hu.tilos.radio.backend.converters.EnumDecoder">
+            <a key="type">this</a>
+            <b>type</b>
+        </field>
+        <field custom-converter="hu.tilos.radio.backend.converters.EnumDecoder">
+            <a key="status">this</a>
+            <b>status</b>
+        </field>
+        <field custom-converter="hu.tilos.radio.backend.converters.ReferenceDecoder">
+            <a key="ref">this</a>
+            <b>id</b>
+        </field>
+    </mapping>
+    <mapping map-null="false">
+        <class-a map-get-method="get" map-set-method="put">org.bson.BSONObject</class-a>
+        <class-b>hu.tilos.radio.backend.show.ShowDetailed</class-b>
+        <field>
+            <a key="_id">this</a>
+            <b>id</b>
+        </field>
+        <field custom-converter="hu.tilos.radio.backend.converters.EnumDecoder">
+            <a key="type">this</a>
+            <b>type</b>
+        </field>
+        <field custom-converter="hu.tilos.radio.backend.converters.EnumDecoder">
+            <a key="status">this</a>
+            <b>status</b>
+        </field>
+        <field>
+            <a key="contributors">this</a>
+            <b>contributors</b>
+        </field>
+    </mapping>
+    <mapping map-null="false">
+        <class-a>hu.tilos.radio.backend.show.ShowToSave</class-a>
+        <class-b map-get-method="get" map-set-method="put">org.bson.BSONObject</class-b>
+        <field custom-converter="hu.tilos.radio.backend.converters.EnumEncoder">
+            <a>type</a>
+            <b key="type">this</b>
+        </field>
+        <field custom-converter="hu.tilos.radio.backend.converters.EnumEncoder">
+            <a>status</a>
+            <b key="status">this</b>
+        </field>
+        <field custom-converter-id="childListEncoder">
+            <a>urls</a>
+            <b key="urls">this</b>
+        </field>
+        <field custom-converter-id="childListEncoder">
+            <a>schedulings</a>
+            <b key="schedulings">this</b>
+        </field>
+        <field-exclude>
+            <a>alias</a>
+            <b key="alias">this</b>
+        </field-exclude>
+    </mapping>
+
+
+</mappings>
