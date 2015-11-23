@@ -4,15 +4,11 @@ import akka.actor.ActorSystem;
 import com.google.gson.Gson;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
-
 import com.google.inject.Injector;
 import com.google.inject.matcher.Matchers;
 import com.mongodb.DB;
 import hu.radio.tilos.model.Role;
-import hu.tilos.radio.backend.author.AuthorService;
-import hu.tilos.radio.backend.author.AuthorToSave;
-import hu.tilos.radio.backend.author.GetAuthorCommand;
-import hu.tilos.radio.backend.author.ListAuthorCommand;
+import hu.tilos.radio.backend.author.*;
 import hu.tilos.radio.backend.bus.MessageBus;
 import hu.tilos.radio.backend.show.MailToShow;
 import hu.tilos.radio.backend.show.ShowService;
@@ -27,9 +23,11 @@ import scala.concurrent.Await;
 import scala.concurrent.duration.Duration;
 import scala.concurrent.duration.FiniteDuration;
 import scala.util.Try;
+import spark.ResponseTransformer;
 
 import javax.inject.Inject;
 import javax.validation.Validator;
+import java.util.stream.Collectors;
 
 import static spark.Spark.*;
 
@@ -76,6 +74,7 @@ public class BasedataStarter {
     private void run() {
         ActorSystem system = ActorSystem.create("TilosBus");
         bus = new MessageBus(system, injector);
+        bus.addHandler(ListAuthorCsvHandler.class, ListAuthorCsvCommand.class);
 
         timeout = Duration.create(5, "seconds");
 
@@ -95,6 +94,20 @@ public class BasedataStarter {
             }
             return result;
         }, jsonResponse);
+
+        get("/api/v1/author.txt", spark.authorized(Role.ADMIN, (req, res, session) -> {
+            Object result = Await.result(bus.tell(new ListAuthorCsvCommand()), timeout);
+            if (result instanceof Try) {
+                return ((Try) result).get();
+            }
+            return result;
+        }), new ResponseTransformer() {
+            @Override
+            public String render(Object model) throws Exception {
+                java.util.List<String> result = (java.util.List<String>) model;
+                return result.stream().collect(Collectors.joining());
+            }
+        });
 
         get("/api/v1/author/:alias", (req, res) -> authorService.get(req.params("alias"), null), jsonResponse);
 

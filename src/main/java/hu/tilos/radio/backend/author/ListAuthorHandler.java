@@ -27,8 +27,6 @@ public class ListAuthorHandler implements Handler<ListAuthorCommand> {
 
     @Override
     public Try handle(ListAuthorCommand command) {
-
-
         DBCursor selectedAuthors = db.getCollection("author").find();
 
         List<AuthorListElement> mappedAuthors = new ArrayList<>();
