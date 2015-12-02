@@ -6,7 +6,6 @@ import hu.tilos.radio.backend.GuiceRunner;
 import hu.tilos.radio.backend.Session;
 import hu.tilos.radio.backend.user.UserInfo;
 import org.dozer.DozerBeanMapper;
-
 import org.junit.Rule;
 import org.junit.Test;
 
