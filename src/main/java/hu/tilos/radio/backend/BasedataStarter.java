@@ -10,6 +10,7 @@ import com.mongodb.DB;
 import hu.radio.tilos.model.Role;
 import hu.tilos.radio.backend.author.*;
 import hu.tilos.radio.backend.bus.MessageBus;
+import hu.tilos.radio.backend.scheduling.SchedulingService;
 import hu.tilos.radio.backend.show.MailToShow;
 import hu.tilos.radio.backend.show.ShowService;
 import hu.tilos.radio.backend.show.ShowToSave;
@@ -27,6 +28,7 @@ import spark.ResponseTransformer;
 
 import javax.inject.Inject;
 import javax.validation.Validator;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 import static spark.Spark.*;
@@ -47,6 +49,8 @@ public class BasedataStarter {
     @Inject
     ShowService showService;
 
+    @Inject
+    SchedulingService schedulingService;
 
     @Inject
     @Configuration(name = "port.basedata")
@@ -95,7 +99,12 @@ public class BasedataStarter {
             return result;
         }, jsonResponse);
 
-        get("/api/v1/author.txt", spark.authorized(Role.ADMIN, (req, res, session) -> {
+        get("/api/v1/scheduling", (req, res) -> {
+            schedulingService.generatePdf(new Date());
+            return "ok";
+        }, jsonResponse);
+
+        get("/api/v1/author/export", spark.authorized(Role.ADMIN, (req, res, session) -> {
             Object result = Await.result(bus.tell(new ListAuthorCsvCommand()), timeout);
             if (result instanceof Try) {
                 return ((Try) result).get();
