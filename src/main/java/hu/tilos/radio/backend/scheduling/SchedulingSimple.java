@@ -1,19 +1,18 @@
-package hu.tilos.radio.backend.data.input;
-
+package hu.tilos.radio.backend.scheduling;
 
 import java.util.Date;
 
-public class SchedulingToSave {
+public class SchedulingSimple {
 
-    private int weekType;
+    int id;
 
-    private int weekDay;
+    int weekDay;
 
-    private int hourFrom;
+    int hourFrom;
 
-    private int minFrom;
+    int minFrom;
 
-    private int duration;
+    int duration;
 
     private Date validFrom;
 
@@ -21,13 +20,9 @@ public class SchedulingToSave {
 
     private Date base;
 
-    public int getWeekType() {
-        return weekType;
-    }
+    private int weekType;
 
-    public void setWeekType(int weekType) {
-        this.weekType = weekType;
-    }
+    private String text;
 
     public int getWeekDay() {
         return weekDay;
@@ -84,4 +79,29 @@ public class SchedulingToSave {
     public void setBase(Date base) {
         this.base = base;
     }
+
+    public int getWeekType() {
+        return weekType;
+    }
+
+    public void setWeekType(int weekType) {
+        this.weekType = weekType;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }
+

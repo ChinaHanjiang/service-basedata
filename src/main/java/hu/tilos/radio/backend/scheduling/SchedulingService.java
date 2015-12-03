@@ -4,7 +4,7 @@ import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCursor;
-import hu.radio.tilos.model.type.ShowType;
+import hu.tilos.radio.backend.show.ShowType;
 import hu.tilos.radio.backend.util.AvatarLocator;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.encoding.EncodingManager;

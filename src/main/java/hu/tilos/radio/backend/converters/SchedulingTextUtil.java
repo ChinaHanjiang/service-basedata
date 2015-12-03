@@ -1,6 +1,6 @@
 package hu.tilos.radio.backend.converters;
 
-import hu.tilos.radio.backend.data.types.SchedulingSimple;
+import hu.tilos.radio.backend.scheduling.SchedulingSimple;
 
 /**
  * Create textual representation of a scheduling.

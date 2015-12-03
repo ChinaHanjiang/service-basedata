@@ -5,8 +5,6 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
 import hu.radio.tilos.model.Role;
-import hu.radio.tilos.model.type.ShowStatus;
-import hu.radio.tilos.model.type.ShowType;
 import hu.tilos.radio.backend.GuiceRunner;
 import hu.tilos.radio.backend.Session;
 import hu.tilos.radio.backend.data.input.UrlToSave;
@@ -19,9 +17,7 @@ import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import javax.inject.Inject;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import static hu.tilos.radio.backend.MongoTestUtil.loadFrom;

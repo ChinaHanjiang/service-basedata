@@ -1,9 +1,7 @@
 package hu.tilos.radio.backend.show;
 
 
-import hu.radio.tilos.model.type.ShowStatus;
-import hu.radio.tilos.model.type.ShowType;
-import hu.tilos.radio.backend.data.input.SchedulingToSave;
+import hu.tilos.radio.backend.scheduling.SchedulingToSave;
 import hu.tilos.radio.backend.data.input.UrlToSave;
 
 import javax.validation.constraints.NotNull;

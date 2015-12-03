@@ -8,11 +8,11 @@
 
             <converter type="hu.tilos.radio.backend.converters.EnumDecoder">
                 <class-a>java.lang.Integer</class-a>
-                <class-b>hu.radio.tilos.model.type.ShowType</class-b>
+                <class-b>hu.tilos.radio.backend.show.ShowType</class-b>
             </converter>
             <converter type="hu.tilos.radio.backend.converters.EnumDecoder">
                 <class-a>java.lang.Integer</class-a>
-                <class-b>hu.radio.tilos.model.type.ShowStatus</class-b>
+                <class-b>hu.tilos.radio.backend.show.ShowStatus</class-b>
             </converter>
 
         </custom-converters>

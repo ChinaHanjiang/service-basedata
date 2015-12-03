@@ -1,6 +1,6 @@
 package hu.tilos.radio.backend.scheduling;
 
-import hu.radio.tilos.model.type.ShowType;
+import hu.tilos.radio.backend.show.ShowType;
 
 import java.util.Date;
 

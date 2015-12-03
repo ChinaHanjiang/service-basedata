@@ -1,7 +1,6 @@
 package hu.tilos.radio.backend.show;
 
 import com.mongodb.*;
-import hu.radio.tilos.model.type.ShowStatus;
 import hu.tilos.radio.backend.Email;
 import hu.tilos.radio.backend.EmailSender;
 import hu.tilos.radio.backend.ObjectValidator;
@@ -11,7 +10,7 @@ import hu.tilos.radio.backend.data.error.NotFoundException;
 import hu.tilos.radio.backend.data.response.CreateResponse;
 import hu.tilos.radio.backend.data.response.OkResponse;
 import hu.tilos.radio.backend.data.response.UpdateResponse;
-import hu.tilos.radio.backend.data.types.SchedulingSimple;
+import hu.tilos.radio.backend.scheduling.SchedulingSimple;
 import hu.tilos.radio.backend.data.types.UrlData;
 import hu.tilos.radio.backend.util.AvatarLocator;
 import hu.tilos.radio.backend.util.RecaptchaValidator;

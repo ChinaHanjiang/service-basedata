@@ -1,4 +1,4 @@
-package hu.radio.tilos.model.type;
+package hu.tilos.radio.backend.show;
 
 public enum ShowStatus {
 
