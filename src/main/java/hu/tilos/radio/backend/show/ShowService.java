@@ -5,7 +5,6 @@ import hu.radio.tilos.model.type.ShowStatus;
 import hu.tilos.radio.backend.Email;
 import hu.tilos.radio.backend.EmailSender;
 import hu.tilos.radio.backend.ObjectValidator;
-import hu.tilos.radio.backend.author.AuthorDetailed;
 import hu.tilos.radio.backend.contribution.ShowContribution;
 import hu.tilos.radio.backend.converters.SchedulingTextUtil;
 import hu.tilos.radio.backend.data.error.NotFoundException;
@@ -169,13 +168,17 @@ public class ShowService {
                 mailToSend.getBody());
         email.setFrom(mailToSend.getFrom());
 
+
         DBObject one = db.getCollection("show").findOne(aliasOrId(alias));
         ShowDetailed detailed = mapper.map(one, ShowDetailed.class);
 
         detailed.getContributors().forEach(contributor -> {
-            AuthorDetailed author = mapper.map(db.getCollection("author").findOne(aliasOrId(contributor.getAuthor().getId())), AuthorDetailed.class);
-            email.setTo(author.getEmail());
-            emailSender.send(email);
+            DBObject dbAuthor = db.getCollection("author").findOne(aliasOrId(contributor.getAuthor().getId()));
+
+            if (dbAuthor.get("email") != null) {
+                email.setTo((String) dbAuthor.get("email"));
+                emailSender.send(email);
+            }
         });
         return new OkResponse("Üzenet elküldve.");
     }

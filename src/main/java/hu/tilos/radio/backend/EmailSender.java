@@ -37,6 +37,7 @@ public class EmailSender {
 
             MandrillMessage.Recipient recipient = new MandrillMessage.Recipient();
             recipient.setEmail(email.getTo());
+
             List<MandrillMessage.Recipient> recipients = new ArrayList<>();
             recipients.add(recipient);
             message.setTo(recipients);
