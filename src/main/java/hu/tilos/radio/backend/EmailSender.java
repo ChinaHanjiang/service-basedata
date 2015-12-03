@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EmailSender {
 
@@ -38,13 +40,14 @@ public class EmailSender {
             List<MandrillMessage.Recipient> recipients = new ArrayList<>();
             recipients.add(recipient);
             message.setTo(recipients);
-            if (email.getFrom() == null) {
-                message.setFromName("Tilos szervergép");
-                message.setFromEmail("noreply@tilos.hu");
-            } else {
-                message.setFromEmail(email.getFrom());
-            }
 
+            message.setFromName("Tilos üzenőfal");
+            message.setFromEmail("noreply@tilos.hu");
+
+            Map<String, String> headers = new HashMap<>();
+            headers.put("Reply-To", email.getFrom());
+
+            message.setHeaders(headers);
 
             message.setPreserveRecipients(false);
             if (!mock.equals("true")) {

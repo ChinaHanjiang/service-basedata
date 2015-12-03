@@ -160,7 +160,13 @@ public class ShowService {
 
         Email email = new Email();
         email.setSubject("[tilos.hu] " + mailToSend.getSubject());
-        email.setBody("Ez a levél a tilos.hu műsoroldaláról lett küldve\n-----------\n\n" + mailToSend.getBody());
+        email.setBody("----- Ez a levél a tilos.hu műsoroldaláról lett küldve-----\n" +
+                "\n" +
+                "A form kitöltője a " + mailToSend.getFrom() + " email-t adta meg válasz címnek, de ennek valódiságát nem ellenőriztük." +
+                "\n" +
+                "-------------------------------------" +
+                "\n" +
+                mailToSend.getBody());
         email.setFrom(mailToSend.getFrom());
 
         DBObject one = db.getCollection("show").findOne(aliasOrId(alias));

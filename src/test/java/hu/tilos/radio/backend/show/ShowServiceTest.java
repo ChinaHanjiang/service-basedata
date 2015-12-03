@@ -73,7 +73,7 @@ public class ShowServiceTest {
 
         Assert.assertEquals(1, show.getSchedulings().size());
 
-        Assert.assertEquals(1, show.getStats().mixCount);
+        Assert.assertEquals(0, show.getStats().mixCount);
 
         Assert.assertEquals(2, show.getUrls().size());
         Assert.assertEquals("facebook", show.getUrls().get(0).getType());

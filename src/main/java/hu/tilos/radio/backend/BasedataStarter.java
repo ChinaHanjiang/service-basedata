@@ -37,7 +37,7 @@ public class BasedataStarter {
 
     private static final Logger LOG = LoggerFactory.getLogger(BasedataStarter.class);
 
-    private Gson gson;
+    private Gson gson = new Gson();
 
     static Injector injector;
 
