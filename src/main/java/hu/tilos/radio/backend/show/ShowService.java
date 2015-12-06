@@ -1,8 +1,8 @@
 package hu.tilos.radio.backend.show;
 
 import com.mongodb.*;
-import hu.tilos.radio.backend.Email;
-import hu.tilos.radio.backend.EmailSender;
+import hu.tilos.radio.backend.email.Email;
+import hu.tilos.radio.backend.email.EmailSender;
 import hu.tilos.radio.backend.ObjectValidator;
 import hu.tilos.radio.backend.contribution.ShowContribution;
 import hu.tilos.radio.backend.converters.SchedulingTextUtil;
@@ -13,7 +13,7 @@ import hu.tilos.radio.backend.data.response.UpdateResponse;
 import hu.tilos.radio.backend.scheduling.SchedulingSimple;
 import hu.tilos.radio.backend.data.types.UrlData;
 import hu.tilos.radio.backend.util.AvatarLocator;
-import hu.tilos.radio.backend.util.RecaptchaValidator;
+import hu.tilos.radio.backend.captcha.RecaptchaValidator;
 import org.bson.types.ObjectId;
 import org.dozer.DozerBeanMapper;
 import org.slf4j.Logger;
