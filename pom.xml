@@ -59,12 +59,6 @@
         </dependency>
 
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.github.fakemongo</groupId>
             <artifactId>fongo</artifactId>
             <version>1.5.7</version>
@@ -84,9 +78,17 @@
         </dependency>
 
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>hu.tilos.radio</groupId>
             <artifactId>test-util</artifactId>
             <version>1.1-SNAPSHOT</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
@@ -110,7 +112,25 @@
                 </executions>
 
             </plugin>
-
+<plugin>
+  <groupId>org.jacoco</groupId>
+  <artifactId>jacoco-maven-plugin</artifactId>
+  <version>0.7.5.201505241946</version>
+  <executions>
+    <execution>
+      <goals>
+        <goal>prepare-agent</goal>
+      </goals>
+    </execution>
+    <execution>
+      <id>report</id>
+      <phase>test</phase>
+      <goals>
+        <goal>report</goal>
+      </goals>
+    </execution>
+  </executions>
+</plugin>
         </plugins>
     </build>
     <repositories>

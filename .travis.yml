@@ -1,8 +1,3 @@
-env:
-  global:
-   - secure: "qCtLyb8TwJv3IrG/rFxSE9zzVPKGhCrelWOxwHLZiJj0R7RZ0QGdol5iL5YkjsC3joCx+UxEMP4MnOb8mZBWr83pXB6odAj/tKwJQbl36xs9Bh8d3gzBa8LhrqWC4ypILn5pgbOkFaqyjdQMl6rKjn0KwFpIxD5zJy7gn38K/AyBwH52tlrK2JCyUv/tvCpO/u6pddZRzpOuanXpC1RsdGh9QsVkLkv4ZpmFPkYHhN9qNUw+pMHce7rG76hUOgkBu9piwt83t2/H3Ny9/Ax/Iu/+qE9mkrKeI+b2dohms+Evfau6dmg3o9JE+/myGvjma0UyEV5lIjomgMqKcJyMryLBWQZK/xxT3DEAaG2YWQ9r8VjE2KoqSzd9eWrpdswTJ8pkcwwiIXYoYCWYEcYFruo2DONXelsv6NjbfrOg0vFHC9kO0igiU6CB+fFQ894KPACejgf67DKjqz37bJL9tODWA4B9btx3/HhXTNGQ2fFj5ST9iztdIUxem/sLV3H4tlFJ5Kze+eXhA4a6PFx6jHvS6zwCJJs6NiB6M22vv/zOrfKAY/SqclYUneq28rbhYmfmkHho1txDp0BoywNfBBGZ4B4PCTfHY8TtdELZ1Edzd0P3+E9a/bDhJL8GNiboDN5dfZJF6eREIyfM7KgOemARMfUiVPeLj6DPk6R+KZg="
-
-    
 language: java
 
 services:
@@ -22,13 +17,7 @@ deploy:
   acl: public_read
   local_dir: target/upload
   skip_cleanup: true
-
-
-addons:
-  coverity_scan:
-    project:
-      name: "tilosradio/service-basedata"
-      description: "Build submitted via Travis CI"
-    build_command_prepend: "mvn clean"
-    build_command:   "mvn -DskipTests=true compile"
-    branch_pattern: coverity_scan
+before_install:
+  - pip install --user codecov
+after_success:
+  - codecov
