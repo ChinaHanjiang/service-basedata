@@ -9,6 +9,7 @@ jdk:
 after_success:
 - mkdir -p target/upload
 - cp target/*capsule-fat*.jar target/upload
+- codecov
 deploy:
   provider: s3
   access_key_id: $S3_KEY
@@ -19,5 +20,3 @@ deploy:
   skip_cleanup: true
 before_install:
   - pip install --user codecov
-after_success:
-  - codecov
