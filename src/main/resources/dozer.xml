@@ -153,10 +153,23 @@
             <a>schedulings</a>
             <b key="schedulings">this</b>
         </field>
-        <field-exclude>
-            <a>alias</a>
-            <b key="alias">this</b>
-        </field-exclude>
+
+    </mapping>
+    <mapping map-null="false">
+        <class-a map-get-method="get" map-set-method="put">org.bson.BSONObject</class-a>
+        <class-b>hu.tilos.radio.backend.user.UserInfo</class-b>
+        <field custom-converter="hu.tilos.radio.backend.converters.EnumDecoder">
+            <a key="role_id">this</a>
+            <b>role</b>
+        </field>
+        <field>
+            <a key="_id">this</a>
+            <b>id</b>
+        </field>
+        <field custom-converter-id="resolvedReferenceDecoder">
+            <a key="author">this</a>
+            <b>author</b>
+        </field>
     </mapping>
 
 

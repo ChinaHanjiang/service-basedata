@@ -1,19 +1,19 @@
 package hu.tilos.radio.backend.show;
 
 import com.mongodb.*;
-import hu.tilos.radio.backend.email.Email;
-import hu.tilos.radio.backend.email.EmailSender;
 import hu.tilos.radio.backend.ObjectValidator;
+import hu.tilos.radio.backend.captcha.RecaptchaValidator;
 import hu.tilos.radio.backend.contribution.ShowContribution;
 import hu.tilos.radio.backend.converters.SchedulingTextUtil;
 import hu.tilos.radio.backend.data.error.NotFoundException;
 import hu.tilos.radio.backend.data.response.CreateResponse;
 import hu.tilos.radio.backend.data.response.OkResponse;
 import hu.tilos.radio.backend.data.response.UpdateResponse;
-import hu.tilos.radio.backend.scheduling.SchedulingSimple;
 import hu.tilos.radio.backend.data.types.UrlData;
+import hu.tilos.radio.backend.email.Email;
+import hu.tilos.radio.backend.email.EmailSender;
+import hu.tilos.radio.backend.scheduling.SchedulingSimple;
 import hu.tilos.radio.backend.util.AvatarLocator;
-import hu.tilos.radio.backend.captcha.RecaptchaValidator;
 import org.bson.types.ObjectId;
 import org.dozer.DozerBeanMapper;
 import org.slf4j.Logger;
@@ -131,10 +131,34 @@ public class ShowService {
     public UpdateResponse update(String alias, ShowToSave showToSave) {
         validator.validate(showToSave);
         DBObject show = findShow(alias);
+
+
+        if (!show.get("alias").toString().equals(showToSave.getAlias())) {
+            updateDenormalizedFields(show.get("alias").toString(), showToSave.getAlias());
+        }
+
         mapper.map(showToSave, show);
         db.getCollection("show").update(aliasOrId(alias), show);
         return new UpdateResponse(true);
 
+    }
+
+    private void updateDenormalizedFields(String oldAlias, String newAlias) {
+        db.getCollection("mix").update(
+                new BasicDBObject("show.alias", oldAlias),
+                new BasicDBObject("$set", new BasicDBObject("show.alias", newAlias)),
+                false, true
+        );
+        db.getCollection("episode").update(
+                new BasicDBObject("show.alias", oldAlias),
+                new BasicDBObject("$set", new BasicDBObject("show.alias", newAlias)),
+                false, true
+        );
+        db.getCollection("author").update(
+                new BasicDBObject("contributions.show.alias", oldAlias),
+                new BasicDBObject("$set", new BasicDBObject("contributions.$.show.alias", newAlias)),
+                false, true
+        );
     }
 
     private DBObject findShow(String alias) {

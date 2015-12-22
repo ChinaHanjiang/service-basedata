@@ -1,7 +1,7 @@
 package hu.tilos.radio.backend;
 
 import akka.actor.ActorSystem;
-import com.google.gson.Gson;
+import com.google.gson.*;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -28,6 +28,7 @@ import spark.ResponseTransformer;
 
 import javax.inject.Inject;
 import javax.validation.Validator;
+import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -37,7 +38,7 @@ public class BasedataStarter {
 
     private static final Logger LOG = LoggerFactory.getLogger(BasedataStarter.class);
 
-    private Gson gson = new Gson();
+    private Gson gson;
 
     static Injector injector;
 
@@ -83,6 +84,20 @@ public class BasedataStarter {
         timeout = Duration.create(5, "seconds");
 
         LOG.info("Starting new deployment");
+
+        gson = new GsonBuilder()
+                .registerTypeAdapter(Date.class, new JsonSerializer<Date>() {
+                    @Override
+                    public JsonElement serialize(Date src, Type type, JsonSerializationContext jsonSerializationContext) {
+                        return src == null ? null : new JsonPrimitive(src.getTime());
+                    }
+                })
+                .registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                    @Override
+                    public Date deserialize(JsonElement json, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+                        return json == null ? null : new Date(json.getAsLong());
+                    }
+                }).create();
 
         SparkDefaults spark = new SparkDefaults(portBasedata, injector);
 

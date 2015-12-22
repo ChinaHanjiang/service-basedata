@@ -10,6 +10,7 @@ import hu.tilos.radio.backend.Session;
 import hu.tilos.radio.backend.data.input.UrlToSave;
 import hu.tilos.radio.backend.data.response.UpdateResponse;
 import hu.tilos.radio.backend.user.UserInfo;
+import org.bson.types.ObjectId;
 import org.dozer.DozerBeanMapper;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -109,8 +110,6 @@ public class ShowServiceTest {
     }
 
 
-
-
     @Test
     public void list() throws Exception {
         //given
@@ -153,6 +152,41 @@ public class ShowServiceTest {
         String expectedUser = loadFrom("show-update-expected.json", showId);
         System.out.println(JSON.serialize(user));
         JSONAssert.assertEquals(expectedUser, JSON.serialize(user), false);
+    }
+
+
+    @Test
+    public void updateWithAliasChange() throws Exception {
+        //given
+        String showId = loadTo(fongoRule, "show", "show-update-original.json");
+        String mix1Id = loadTo(fongoRule, "mix", "mix-1.json", showId);
+        String mix2Id = loadTo(fongoRule, "mix", "mix-2.json", showId);
+
+        UserInfo detailed = new UserInfo();
+        detailed.setRole(Role.ADMIN);
+        session.setCurrentUser(detailed);
+
+        ShowToSave showToSave = new ShowToSave();
+        showToSave.setType(ShowType.MUSIC);
+        showToSave.setStatus(ShowStatus.ACTIVE);
+        showToSave.setName("test");
+        showToSave.setAlias("alias");
+        UrlToSave url = new UrlToSave();
+        url.setAddress("http://pipacs.com");
+        showToSave.getUrls().add(url);
+
+        //when
+        UpdateResponse update = controller.update("3utas", showToSave);
+
+        //then
+        DBObject show = fongoRule.getDB().getCollection("show").findOne(new BasicDBObject("_id", new ObjectId(showId)));
+        Assert.assertEquals("alias", show.get("alias"));
+
+        DBObject mix = fongoRule.getDB().getCollection("mix").findOne(new BasicDBObject("_id", new ObjectId(mix1Id)));
+        Assert.assertEquals("alias", ((DBObject) mix.get("show")).get("alias"));
+
+        mix = fongoRule.getDB().getCollection("mix").findOne(new BasicDBObject("_id", new ObjectId(mix2Id)));
+        Assert.assertEquals("alias", ((DBObject) mix.get("show")).get("alias"));
     }
 
 
