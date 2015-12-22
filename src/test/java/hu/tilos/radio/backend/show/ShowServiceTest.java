@@ -161,6 +161,7 @@ public class ShowServiceTest {
         String showId = loadTo(fongoRule, "show", "show-update-original.json");
         String mix1Id = loadTo(fongoRule, "mix", "mix-1.json", showId);
         String mix2Id = loadTo(fongoRule, "mix", "mix-2.json", showId);
+        String episodeId = loadTo(fongoRule, "episode", "episode-episode1.json", showId);
 
         UserInfo detailed = new UserInfo();
         detailed.setRole(Role.ADMIN);
@@ -187,6 +188,9 @@ public class ShowServiceTest {
 
         mix = fongoRule.getDB().getCollection("mix").findOne(new BasicDBObject("_id", new ObjectId(mix2Id)));
         Assert.assertEquals("alias", ((DBObject) mix.get("show")).get("alias"));
+
+        DBObject episode = fongoRule.getDB().getCollection("episode").findOne(new BasicDBObject("_id", new ObjectId(episodeId)));
+        Assert.assertEquals("alias", ((DBObject) episode.get("show")).get("alias"));
     }
 
 
