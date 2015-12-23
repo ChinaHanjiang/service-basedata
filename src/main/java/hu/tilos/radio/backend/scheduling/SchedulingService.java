@@ -18,6 +18,8 @@ import org.dozer.DozerBeanMapper;
 
 import javax.inject.Inject;
 import java.awt.*;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -78,7 +80,7 @@ public class SchedulingService {
     }
 
 
-    public void generatePdf(Date now) {
+    public void generatePdf(Date now, OutputStream outputStream) {
         try {
             List<SchedulingWithShow> schedulings = listSchedulings(now);
             PDDocument document = new PDDocument();
@@ -110,11 +112,20 @@ public class SchedulingService {
 
             float dayWidth = (xsize - marginLeft - marginRight) / 7;
             float hourHeight = (ysize - 100) / 24;
+
+            String[] days = new String[]{"Hétfö", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"};
             for (int i = 0; i < 7; i++) {
                 contentStream.addRect(marginLeft + i * dayWidth - 1, 50, dayWidth, hourHeight * 24);
                 contentStream.closeAndStroke();
-            }
 
+                contentStream.beginText();
+                contentStream.setFont(font, 12);
+                String dayName = days[i].toUpperCase();
+                contentStream.moveTextPositionByAmount(marginLeft + i * dayWidth - 1 + ((dayWidth - getTextWidth(font, 12, dayName)) / 2), ysize - 35);
+                contentStream.drawString(dayName);
+
+                contentStream.endText();
+            }
 
 
             for (int i = 0; i < 25; i++) {
@@ -165,19 +176,12 @@ public class SchedulingService {
                 contentStream.beginText();
                 String text = scheduling.getShowName().replace('ő', 'ö').replace('ű', 'ü');
 
-                int fontSize = 4;
-                float titleWidth = 0;
-                float titleHeight = 0;
-                while (fontSize < 12 && titleWidth < cellWidth * 0.8 && titleHeight < cellHight * 0.9) {
-                    titleWidth = font.getStringWidth(text) / 1000 * fontSize;
-                    titleHeight = font.getFontDescriptor().getFontBoundingBox().getHeight() / 1000 * fontSize;
-                    fontSize++;
-                }
-                fontSize--;
-                titleWidth = font.getStringWidth(text) / 1000 * fontSize;
-                titleHeight = font.getFontDescriptor().getFontBoundingBox().getHeight() / 1000 * fontSize;
+                int oneLineFontSize = calculateFontSize(font, cellWidth, cellHight, new String[]{text});
+
+                float titleWidth = getTextWidth(font, oneLineFontSize, text);
+                float titleHeight = getTextHeight(font, oneLineFontSize);
                 contentStream.setNonStrokingColor(0, 0, 0);
-                contentStream.setFont(font, fontSize);
+                contentStream.setFont(font, oneLineFontSize);
                 contentStream.moveTextPositionByAmount(xpos + offset + (cellWidth - titleWidth) / 2, ypos + (cellHight - titleHeight) / 2);
                 contentStream.drawString(text);
                 contentStream.endText();
@@ -188,12 +192,35 @@ public class SchedulingService {
 
             contentStream.close();
 
-            document.save("/tmp/scheduling.pdf");
+            document.save(outputStream);
             document.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    private int calculateFontSize(PDSimpleFont font, float cellWidth, float cellHeight, String[] text) throws IOException {
+        int fontSize = 4;
+        float titleWidth = 0;
+        float titleHeight = 0;
+        String longestName = Arrays.stream(text).max(Comparator.comparing(String::length)).get();
+
+        while (fontSize < 12 && titleWidth < cellWidth * 0.8 && titleHeight * text.length < cellHeight * 0.9) {
+            titleWidth = getTextWidth(font, fontSize, longestName);
+            titleHeight = getTextHeight(font, fontSize);
+            fontSize++;
+        }
+        fontSize--;
+        return fontSize;
+    }
+
+    private float getTextHeight(PDSimpleFont font, int fontSize) {
+        return font.getFontDescriptor().getFontBoundingBox().getHeight() / 1000 * fontSize;
+    }
+
+    private float getTextWidth(PDSimpleFont font, int fontSize, String text) throws IOException {
+        return font.getStringWidth(text) / 1000 * fontSize;
     }
 
 

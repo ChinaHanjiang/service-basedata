@@ -2,15 +2,13 @@ package hu.tilos.radio.backend.scheduling;
 
 import com.github.fakemongo.junit.FongoRule;
 import hu.tilos.radio.backend.GuiceRunner;
-import hu.tilos.radio.backend.TestUtil;
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
 import javax.inject.Inject;
+import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.List;
 
 import static hu.tilos.radio.backend.MongoTestUtil.loadTo;
 
@@ -45,7 +43,7 @@ public class SchedulingServiceTest {
         //SchedulingWithShow schedulingWithShow = schedulings.get(0);
         //Assert.assertEquals(Integer.valueOf((5 * 24 + 8) * 60), schedulingWithShow.getWeekMinFrom());
 
-        controller.generatePdf(new Date());
+        controller.generatePdf(new Date(), new ByteArrayOutputStream());
     }
 
 }

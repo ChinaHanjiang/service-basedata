@@ -115,8 +115,11 @@ public class BasedataStarter {
         }, jsonResponse);
 
         get("/api/v1/scheduling", (req, res) -> {
-            schedulingService.generatePdf(new Date());
-            return "ok";
+            res.header("Content-type", "application/pdf");
+            res.header("Content-Disposition", "inline; filename=tilos-heti.pdf");
+            res.header("Content-Transfer-Encoding", "binary");
+            schedulingService.generatePdf(new Date(), res.raw().getOutputStream());
+            return "";
         }, jsonResponse);
 
         get("/api/v1/author/export", spark.authorized(Role.ADMIN, (req, res, session) -> {
