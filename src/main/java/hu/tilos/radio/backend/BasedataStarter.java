@@ -10,6 +10,8 @@ import com.mongodb.DB;
 import hu.radio.tilos.model.Role;
 import hu.tilos.radio.backend.author.*;
 import hu.tilos.radio.backend.bus.MessageBus;
+import hu.tilos.radio.backend.contribution.ContributionService;
+import hu.tilos.radio.backend.contribution.ContributionToSave;
 import hu.tilos.radio.backend.scheduling.SchedulingService;
 import hu.tilos.radio.backend.show.MailToShow;
 import hu.tilos.radio.backend.show.ShowService;
@@ -49,6 +51,9 @@ public class BasedataStarter {
 
     @Inject
     ShowService showService;
+
+    @Inject
+    ContributionService contributionService;
 
     @Inject
     SchedulingService schedulingService;
@@ -167,6 +172,12 @@ public class BasedataStarter {
 
         post("/api/v1/show/:alias/contact", (req, res) ->
                 showService.contact(req.params("alias"), gson.fromJson(req.body(), MailToShow.class)), jsonResponse);
+
+        post("/api/int/contribution", spark.authorized(Role.ADMIN, (req, res, session) ->
+                contributionService.save(gson.fromJson(req.body(), ContributionToSave.class))), jsonResponse);
+
+        delete("/api/int/contribution", spark.authorized(Role.ADMIN, (req, res, session) ->
+                contributionService.delete(req.queryParams("author"), req.queryParams("show"))), jsonResponse);
 
 
     }
