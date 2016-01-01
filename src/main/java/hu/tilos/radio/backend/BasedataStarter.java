@@ -173,10 +173,10 @@ public class BasedataStarter {
         post("/api/v1/show/:alias/contact", (req, res) ->
                 showService.contact(req.params("alias"), gson.fromJson(req.body(), MailToShow.class)), jsonResponse);
 
-        post("/api/int/contribution", spark.authorized(Role.ADMIN, (req, res, session) ->
+        post("/api/v1/contribution", spark.authorized(Role.ADMIN, (req, res, session) ->
                 contributionService.save(gson.fromJson(req.body(), ContributionToSave.class))), jsonResponse);
 
-        delete("/api/int/contribution", spark.authorized(Role.ADMIN, (req, res, session) ->
+        delete("/api/v1/contribution", spark.authorized(Role.ADMIN, (req, res, session) ->
                 contributionService.delete(req.queryParams("author"), req.queryParams("show"))), jsonResponse);
 
 
