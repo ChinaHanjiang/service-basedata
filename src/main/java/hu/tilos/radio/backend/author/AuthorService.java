@@ -54,6 +54,9 @@ public class AuthorService {
             throw new NotFoundException("No such show");
         }
         AuthorDetailed author = mapper.map(one, AuthorDetailed.class);
+        if (session != null && session.getCurrentUser() != null && session.getCurrentUser().getRole().equals(Role.ADMIN)){
+            author.setEmail(one.get("email").toString());
+        }
         avatarLocator.locateAvatar(author);
         if (session != null && session.getCurrentUser() != null && (session.getCurrentUser().getRole() == Role.ADMIN || session.getCurrentUser().getRole() == Role.AUTHOR)) {
             author.setEmail((String) one.get("email"));
@@ -75,7 +78,6 @@ public class AuthorService {
         return new UpdateResponse(true);
 
     }
-
 
 
     public CreateResponse create(AuthorToSave authorToSave) {
