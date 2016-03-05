@@ -141,7 +141,7 @@ public class BasedataStarter {
             }
         });
 
-        get("/api/v1/author/:alias", (req, res) -> authorService.get(req.params("alias"), null), jsonResponse);
+        get("/api/v1/author/:alias", spark.authorized(Role.UNKNOWN, (req, res, session) -> authorService.get(req.params("alias"), session)), jsonResponse);
 
 
         get("/api/v1/authorx/:alias", (req, res) -> {
