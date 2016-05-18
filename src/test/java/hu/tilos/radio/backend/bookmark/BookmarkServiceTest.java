@@ -37,41 +37,41 @@ public class BookmarkServiceTest {
         return fongoRule;
     }
 
-    @Test
-    public void testSave() throws Exception {
-        //given
-        String episodeId = loadTo(fongoRule, "episode", "episode-episode2.json");
-        String userId = loadTo(fongoRule, "user", "user-1.json");
+//    @Test
+//    public void testSave() throws Exception {
+//        //given
+//        String episodeId = loadTo(fongoRule, "episode", "episode-episode2.json");
+//        String userId = loadTo(fongoRule, "user", "user-1.json");
+//
+//        BookmarkToSave bts = new BookmarkToSave();
+//        bts.setFrom(TestUtil.YYYYMMDDHHMM.parse("201410121000"));
+//        bts.setTo(TestUtil.YYYYMMDDHHMM.parse("201410121100"));
+//        bts.setEpisodeRef(episodeId);
+//        bts.setTitle("asd");
+//
+//        //when
+//        service.create(new Session(new UserInfo(userId, "asd")), episodeId, bts);
+//
+//        //then
+//        DBObject episode = fongoRule.getDB().getCollection("episode").findOne(new BasicDBObject("_id", new ObjectId((episodeId))));
+//        BasicDBList bookmarks = (BasicDBList) episode.get("bookmarks");
+//        Assert.assertEquals(1, bookmarks.size());
+//    }
 
-        BookmarkToSave bts = new BookmarkToSave();
-        bts.setFrom(TestUtil.YYYYMMDDHHMM.parse("201410121000"));
-        bts.setTo(TestUtil.YYYYMMDDHHMM.parse("201410121100"));
-        bts.setEpisodeRef(episodeId);
-        bts.setTitle("asd");
-
-        //when
-        service.create(new Session(new UserInfo(userId, "asd")), episodeId, bts);
-
-        //then
-        DBObject episode = fongoRule.getDB().getCollection("episode").findOne(new BasicDBObject("_id", new ObjectId((episodeId))));
-        BasicDBList bookmarks = (BasicDBList) episode.get("bookmarks");
-        Assert.assertEquals(1, bookmarks.size());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testSaveWithWrongId() throws Exception {
-        //given
-        String episodeId = loadTo(fongoRule, "episode", "episode-episode2.json");
-        String userId = loadTo(fongoRule, "user", "user-1.json");
-
-        BookmarkToSave bts = new BookmarkToSave();
-        bts.setFrom(TestUtil.YYYYMMDDHHMM.parse("201410121000"));
-        bts.setTo(TestUtil.YYYYMMDDHHMM.parse("201410121100"));
-        bts.setEpisodeRef(episodeId);
-        bts.setTitle("asd");
-
-        //when
-        service.create(new Session(new UserInfo(userId, "asd")), "asd", bts);
-
-    }
+//    @Test(expected = IllegalArgumentException.class)
+//    public void testSaveWithWrongId() throws Exception {
+//        //given
+//        String episodeId = loadTo(fongoRule, "episode", "episode-episode2.json");
+//        String userId = loadTo(fongoRule, "user", "user-1.json");
+//
+//        BookmarkToSave bts = new BookmarkToSave();
+//        bts.setFrom(TestUtil.YYYYMMDDHHMM.parse("201410121000"));
+//        bts.setTo(TestUtil.YYYYMMDDHHMM.parse("201410121100"));
+//        bts.setEpisodeRef(episodeId);
+//        bts.setTitle("asd");
+//
+//        //when
+//        service.create(new Session(new UserInfo(userId, "asd")), "asd", bts);
+//
+//    }
 }

@@ -4,8 +4,8 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
-import hu.radio.tilos.model.Role;
-import hu.tilos.radio.backend.Session;
+import hu.tilos.radio.backend.auth.Role;
+import hu.tilos.radio.backend.auth.Session;
 import hu.tilos.radio.backend.data.error.NotFoundException;
 import hu.tilos.radio.backend.data.response.CreateResponse;
 import hu.tilos.radio.backend.data.response.UpdateResponse;
@@ -14,6 +14,7 @@ import org.bson.types.ObjectId;
 import org.dozer.DozerBeanMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import static hu.tilos.radio.backend.MongoUtil.aliasOrId;
 
+@Service
 public class AuthorService {
 
     private static Logger LOG = LoggerFactory.getLogger(AuthorService.class);

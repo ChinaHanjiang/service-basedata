@@ -5,7 +5,6 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCursor;
 import hu.tilos.radio.backend.show.ShowType;
-import hu.tilos.radio.backend.util.AvatarLocator;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.encoding.EncodingManager;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -15,6 +14,7 @@ import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDSimpleFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.dozer.DozerBeanMapper;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.awt.*;
@@ -25,14 +25,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+@Service
 public class SchedulingService {
 
 
     @Inject
     private DB db;
-
-    @Inject
-    AvatarLocator avatarLocator;
 
     @Inject
     private DozerBeanMapper mapper;

@@ -3,18 +3,15 @@ package hu.tilos.radio.backend.author;
 import com.mongodb.DB;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
-import hu.tilos.radio.backend.bus.Handler;
 import hu.tilos.radio.backend.util.AvatarLocator;
 import org.dozer.DozerBeanMapper;
-import scala.util.Success;
-import scala.util.Try;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ListAuthorCsvHandler implements Handler<ListAuthorCsvCommand> {
+public class ListAuthorCsvHandler {
 
 
     @Inject
@@ -26,8 +23,8 @@ public class ListAuthorCsvHandler implements Handler<ListAuthorCsvCommand> {
     @Inject
     private DozerBeanMapper mapper;
 
-    @Override
-    public Try handle(ListAuthorCsvCommand command) {
+
+    public void handle() {
         DBCursor selectedAuthors = db.getCollection("author").find();
 
         List<String> resultList = new ArrayList();
@@ -49,7 +46,7 @@ public class ListAuthorCsvHandler implements Handler<ListAuthorCsvCommand> {
                 resultList.add(result.toString() + "\n");
             }
         }
-        return new Success(resultList);
+
 
     }
 

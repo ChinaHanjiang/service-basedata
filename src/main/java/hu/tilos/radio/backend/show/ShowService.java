@@ -1,7 +1,6 @@
 package hu.tilos.radio.backend.show;
 
 import com.mongodb.*;
-import hu.tilos.radio.backend.ObjectValidator;
 import hu.tilos.radio.backend.captcha.RecaptchaValidator;
 import hu.tilos.radio.backend.contribution.ShowContribution;
 import hu.tilos.radio.backend.converters.SchedulingTextUtil;
@@ -10,14 +9,13 @@ import hu.tilos.radio.backend.data.response.CreateResponse;
 import hu.tilos.radio.backend.data.response.OkResponse;
 import hu.tilos.radio.backend.data.response.UpdateResponse;
 import hu.tilos.radio.backend.data.types.UrlData;
-import hu.tilos.radio.backend.email.Email;
-import hu.tilos.radio.backend.email.EmailSender;
 import hu.tilos.radio.backend.scheduling.SchedulingSimple;
 import hu.tilos.radio.backend.util.AvatarLocator;
 import org.bson.types.ObjectId;
 import org.dozer.DozerBeanMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.*;
@@ -25,14 +23,12 @@ import java.util.stream.Collectors;
 
 import static hu.tilos.radio.backend.MongoUtil.aliasOrId;
 
+@Service
 public class ShowService {
 
     private static Logger LOG = LoggerFactory.getLogger(ShowService.class);
 
     private final SchedulingTextUtil schedulingTextUtil = new SchedulingTextUtil();
-
-    @Inject
-    ObjectValidator validator;
 
 
     @Inject
@@ -46,10 +42,8 @@ public class ShowService {
     private RecaptchaValidator captchaValidator;
 
     @Inject
-    private EmailSender emailSender;
-
-    @Inject
     private DB db;
+
 
     public List<ShowSimple> list(String status) {
         BasicDBObject criteria = new BasicDBObject();
@@ -129,7 +123,6 @@ public class ShowService {
 
 
     public UpdateResponse update(String alias, ShowToSave showToSave) {
-        validator.validate(showToSave);
         DBObject show = findShow(alias);
 
 
@@ -167,7 +160,6 @@ public class ShowService {
 
 
     public CreateResponse create(ShowToSave objectToSave) {
-        validator.validate(objectToSave);
         DBObject newObject = mapper.map(objectToSave, BasicDBObject.class);
         newObject.put("alias", objectToSave.getAlias());
         db.getCollection("show").insert(newObject);
@@ -175,34 +167,34 @@ public class ShowService {
     }
 
     public OkResponse contact(String alias, MailToShow mailToSend) {
-        validator.validate(mailToSend);
-        if (!captchaValidator.validate("http://tilos.hu", mailToSend.getCaptchaChallenge(), mailToSend.getCaptchaResponse())) {
-            throw new IllegalArgumentException("Rosszul megadott Captcha");
-        }
-
-        Email email = new Email();
-        email.setSubject("[tilos.hu] " + mailToSend.getSubject());
-        email.setBody("----- Ez a levél a tilos.hu műsoroldaláról lett küldve-----\n" +
-                "\n" +
-                "A form kitöltője a " + mailToSend.getFrom() + " email-t adta meg válasz címnek, de ennek valódiságát nem ellenőriztük." +
-                "\n" +
-                "-------------------------------------" +
-                "\n" +
-                mailToSend.getBody());
-        email.setFrom(mailToSend.getFrom());
-
-
-        DBObject one = db.getCollection("show").findOne(aliasOrId(alias));
-        ShowDetailed detailed = mapper.map(one, ShowDetailed.class);
-
-        detailed.getContributors().forEach(contributor -> {
-            DBObject dbAuthor = db.getCollection("author").findOne(aliasOrId(contributor.getAuthor().getId()));
-
-            if (dbAuthor.get("email") != null) {
-                email.setTo((String) dbAuthor.get("email"));
-                emailSender.send(email);
-            }
-        });
+//        validator.validate(mailToSend);
+//        if (!captchaValidator.validate("http://tilos.hu", mailToSend.getCaptchaChallenge(), mailToSend.getCaptchaResponse())) {
+//            throw new IllegalArgumentException("Rosszul megadott Captcha");
+//        }
+//
+//        Email email = new Email();
+//        email.setSubject("[tilos.hu] " + mailToSend.getSubject());
+//        email.setBody("----- Ez a levél a tilos.hu műsoroldaláról lett küldve-----\n" +
+//                "\n" +
+//                "A form kitöltője a " + mailToSend.getFrom() + " email-t adta meg válasz címnek, de ennek valódiságát nem ellenőriztük." +
+//                "\n" +
+//                "-------------------------------------" +
+//                "\n" +
+//                mailToSend.getBody());
+//        email.setFrom(mailToSend.getFrom());
+//
+//
+//        DBObject one = db.getCollection("show").findOne(aliasOrId(alias));
+//        ShowDetailed detailed = mapper.map(one, ShowDetailed.class);
+//
+//        detailed.getContributors().forEach(contributor -> {
+//            DBObject dbAuthor = db.getCollection("author").findOne(aliasOrId(contributor.getAuthor().getId()));
+//
+//            if (dbAuthor.get("email") != null) {
+//                email.setTo((String) dbAuthor.get("email"));
+//                emailSender.send(email);
+//            }
+//        });
         return new OkResponse("Üzenet elküldve.");
     }
 

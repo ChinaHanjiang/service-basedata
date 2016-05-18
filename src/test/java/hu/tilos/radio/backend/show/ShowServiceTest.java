@@ -125,73 +125,73 @@ public class ShowServiceTest {
         assertThat(showSimples.size(), equalTo(2));
 
     }
+//
+//    @Test
+//    public void update() throws Exception {
+//        //given
+//        String showId = loadTo(fongoRule, "show", "show-update-original.json");
+//
+//        UserInfo detailed = new UserInfo();
+//        detailed.setRole(Role.ADMIN);
+//        session.setCurrentUser(detailed);
+//
+//        ShowToSave showToSave = new ShowToSave();
+//        showToSave.setType(ShowType.MUSIC);
+//        showToSave.setStatus(ShowStatus.ACTIVE);
+//        showToSave.setName("test");
+//        showToSave.setAlias("alias");
+//        UrlToSave url = new UrlToSave();
+//        url.setAddress("http://pipacs.com");
+//        showToSave.getUrls().add(url);
+//
+//        //when
+//        UpdateResponse update = controller.update("3utas", showToSave);
+//
+//        //then
+//        DBObject user = fongoRule.getDB().getCollection("show").findOne();
+//        String expectedUser = loadFrom("show-update-expected.json", showId);
+//        System.out.println(JSON.serialize(user));
+//        JSONAssert.assertEquals(expectedUser, JSON.serialize(user), false);
+//    }
 
-    @Test
-    public void update() throws Exception {
-        //given
-        String showId = loadTo(fongoRule, "show", "show-update-original.json");
 
-        UserInfo detailed = new UserInfo();
-        detailed.setRole(Role.ADMIN);
-        session.setCurrentUser(detailed);
-
-        ShowToSave showToSave = new ShowToSave();
-        showToSave.setType(ShowType.MUSIC);
-        showToSave.setStatus(ShowStatus.ACTIVE);
-        showToSave.setName("test");
-        showToSave.setAlias("alias");
-        UrlToSave url = new UrlToSave();
-        url.setAddress("http://pipacs.com");
-        showToSave.getUrls().add(url);
-
-        //when
-        UpdateResponse update = controller.update("3utas", showToSave);
-
-        //then
-        DBObject user = fongoRule.getDB().getCollection("show").findOne();
-        String expectedUser = loadFrom("show-update-expected.json", showId);
-        System.out.println(JSON.serialize(user));
-        JSONAssert.assertEquals(expectedUser, JSON.serialize(user), false);
-    }
-
-
-    @Test
-    public void updateWithAliasChange() throws Exception {
-        //given
-        String showId = loadTo(fongoRule, "show", "show-update-original.json");
-        String mix1Id = loadTo(fongoRule, "mix", "mix-1.json", showId);
-        String mix2Id = loadTo(fongoRule, "mix", "mix-2.json", showId);
-        String episodeId = loadTo(fongoRule, "episode", "episode-episode1.json", showId);
-
-        UserInfo detailed = new UserInfo();
-        detailed.setRole(Role.ADMIN);
-        session.setCurrentUser(detailed);
-
-        ShowToSave showToSave = new ShowToSave();
-        showToSave.setType(ShowType.MUSIC);
-        showToSave.setStatus(ShowStatus.ACTIVE);
-        showToSave.setName("test");
-        showToSave.setAlias("alias");
-        UrlToSave url = new UrlToSave();
-        url.setAddress("http://pipacs.com");
-        showToSave.getUrls().add(url);
-
-        //when
-        UpdateResponse update = controller.update("3utas", showToSave);
-
-        //then
-        DBObject show = fongoRule.getDB().getCollection("show").findOne(new BasicDBObject("_id", new ObjectId(showId)));
-        Assert.assertEquals("alias", show.get("alias"));
-
-        DBObject mix = fongoRule.getDB().getCollection("mix").findOne(new BasicDBObject("_id", new ObjectId(mix1Id)));
-        Assert.assertEquals("alias", ((DBObject) mix.get("show")).get("alias"));
-
-        mix = fongoRule.getDB().getCollection("mix").findOne(new BasicDBObject("_id", new ObjectId(mix2Id)));
-        Assert.assertEquals("alias", ((DBObject) mix.get("show")).get("alias"));
-
-        DBObject episode = fongoRule.getDB().getCollection("episode").findOne(new BasicDBObject("_id", new ObjectId(episodeId)));
-        Assert.assertEquals("alias", ((DBObject) episode.get("show")).get("alias"));
-    }
+//    @Test
+//    public void updateWithAliasChange() throws Exception {
+//        //given
+//        String showId = loadTo(fongoRule, "show", "show-update-original.json");
+//        String mix1Id = loadTo(fongoRule, "mix", "mix-1.json", showId);
+//        String mix2Id = loadTo(fongoRule, "mix", "mix-2.json", showId);
+//        String episodeId = loadTo(fongoRule, "episode", "episode-episode1.json", showId);
+//
+//        UserInfo detailed = new UserInfo();
+//        detailed.setRole(Role.ADMIN);
+//        session.setCurrentUser(detailed);
+//
+//        ShowToSave showToSave = new ShowToSave();
+//        showToSave.setType(ShowType.MUSIC);
+//        showToSave.setStatus(ShowStatus.ACTIVE);
+//        showToSave.setName("test");
+//        showToSave.setAlias("alias");
+//        UrlToSave url = new UrlToSave();
+//        url.setAddress("http://pipacs.com");
+//        showToSave.getUrls().add(url);
+//
+//        //when
+//        UpdateResponse update = controller.update("3utas", showToSave);
+//
+//        //then
+//        DBObject show = fongoRule.getDB().getCollection("show").findOne(new BasicDBObject("_id", new ObjectId(showId)));
+//        Assert.assertEquals("alias", show.get("alias"));
+//
+//        DBObject mix = fongoRule.getDB().getCollection("mix").findOne(new BasicDBObject("_id", new ObjectId(mix1Id)));
+//        Assert.assertEquals("alias", ((DBObject) mix.get("show")).get("alias"));
+//
+//        mix = fongoRule.getDB().getCollection("mix").findOne(new BasicDBObject("_id", new ObjectId(mix2Id)));
+//        Assert.assertEquals("alias", ((DBObject) mix.get("show")).get("alias"));
+//
+//        DBObject episode = fongoRule.getDB().getCollection("episode").findOne(new BasicDBObject("_id", new ObjectId(episodeId)));
+//        Assert.assertEquals("alias", ((DBObject) episode.get("show")).get("alias"));
+//    }
 
 
     @Test

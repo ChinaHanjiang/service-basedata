@@ -1,15 +1,17 @@
 package hu.tilos.radio.backend.util;
 
-import hu.tilos.radio.backend.Configuration;
 import hu.tilos.radio.backend.author.AuthorBasic;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.io.File;
 
+@Service
 public class AvatarLocator {
 
     @Inject
-    @Configuration(name = "upload.dir")
+    @Value("${upload.dir}")
     private String uploadDir;
 
     public void locateAvatar(AuthorBasic author) {

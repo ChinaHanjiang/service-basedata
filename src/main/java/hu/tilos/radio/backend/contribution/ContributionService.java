@@ -3,9 +3,11 @@ package hu.tilos.radio.backend.contribution;
 import com.mongodb.*;
 import hu.tilos.radio.backend.data.response.OkResponse;
 import org.bson.types.ObjectId;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 
+@Service
 public class ContributionService {
 
     @Inject

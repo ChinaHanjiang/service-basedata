@@ -1,7 +1,7 @@
 package hu.tilos.radio.backend.bookmark;
 
 import com.mongodb.*;
-import hu.tilos.radio.backend.Session;
+import hu.tilos.radio.backend.auth.Session;
 import hu.tilos.radio.backend.data.response.CreateResponse;
 import org.bson.types.ObjectId;
 import org.dozer.DozerBeanMapper;
