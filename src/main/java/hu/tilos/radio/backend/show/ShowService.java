@@ -4,6 +4,7 @@ import com.mongodb.*;
 import hu.tilos.radio.backend.captcha.RecaptchaValidator;
 import hu.tilos.radio.backend.contribution.ShowContribution;
 import hu.tilos.radio.backend.converters.SchedulingTextUtil;
+import hu.tilos.radio.backend.data.error.InternalErrorException;
 import hu.tilos.radio.backend.data.error.NotFoundException;
 import hu.tilos.radio.backend.data.response.CreateResponse;
 import hu.tilos.radio.backend.data.response.OkResponse;
@@ -15,9 +16,13 @@ import org.bson.types.ObjectId;
 import org.dozer.DozerBeanMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,6 +48,9 @@ public class ShowService {
 
     @Inject
     private DB db;
+
+    @Inject
+    private JavaMailSender mailSender;
 
 
     public List<ShowSimple> list(String status) {
@@ -167,34 +175,49 @@ public class ShowService {
     }
 
     public OkResponse contact(String alias, MailToShow mailToSend) {
-//        validator.validate(mailToSend);
 //        if (!captchaValidator.validate("http://tilos.hu", mailToSend.getCaptchaChallenge(), mailToSend.getCaptchaResponse())) {
 //            throw new IllegalArgumentException("Rosszul megadott Captcha");
 //        }
-//
-//        Email email = new Email();
-//        email.setSubject("[tilos.hu] " + mailToSend.getSubject());
-//        email.setBody("----- Ez a levél a tilos.hu műsoroldaláról lett küldve-----\n" +
-//                "\n" +
-//                "A form kitöltője a " + mailToSend.getFrom() + " email-t adta meg válasz címnek, de ennek valódiságát nem ellenőriztük." +
-//                "\n" +
-//                "-------------------------------------" +
-//                "\n" +
-//                mailToSend.getBody());
-//        email.setFrom(mailToSend.getFrom());
-//
-//
-//        DBObject one = db.getCollection("show").findOne(aliasOrId(alias));
-//        ShowDetailed detailed = mapper.map(one, ShowDetailed.class);
-//
-//        detailed.getContributors().forEach(contributor -> {
-//            DBObject dbAuthor = db.getCollection("author").findOne(aliasOrId(contributor.getAuthor().getId()));
-//
-//            if (dbAuthor.get("email") != null) {
-//                email.setTo((String) dbAuthor.get("email"));
-//                emailSender.send(email);
-//            }
-//        });
+        MimeMessage mail = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mail, false);
+
+            String body = "----- Ez a levél a tilos.hu műsoroldaláról lett küldve-----\n" +
+                    "\n" +
+                    "A form kitöltője a " + mailToSend.getFrom() + " email-t adta meg válasz címnek, de ennek valódiságát nem ellenőriztük." +
+                    "\n" +
+                    "-------------------------------------" +
+                    "\n" +
+                    mailToSend.getBody();
+
+
+            helper.setFrom("postas@tilos.hu");
+            helper.setReplyTo(mailToSend.getFrom());
+            helper.setSubject("[tilos.hu] " + mailToSend.getSubject());
+            helper.setText(body);
+
+
+            DBObject one = db.getCollection("show").findOne(aliasOrId(alias));
+            if (one == null) {
+                throw new IllegalArgumentException("No such show: " + alias);
+            }
+            ShowDetailed detailed = mapper.map(one, ShowDetailed.class);
+
+            detailed.getContributors().forEach(contributor -> {
+                DBObject dbAuthor = db.getCollection("author").findOne(aliasOrId(contributor.getAuthor().getId()));
+
+                if (dbAuthor.get("email") != null) {
+                    try {
+                        helper.setTo((String) dbAuthor.get("email"));
+                    } catch (MessagingException e) {
+                        throw new RuntimeException(e);
+                    }
+                    mailSender.send(mail);
+                }
+            });
+        } catch (Exception e) {
+            throw new InternalErrorException("Can't send the email message: " + e.getMessage(), e);
+        }
         return new OkResponse("Üzenet elküldve.");
     }
 

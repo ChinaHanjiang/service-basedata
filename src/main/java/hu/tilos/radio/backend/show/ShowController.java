@@ -4,6 +4,7 @@ import hu.tilos.radio.backend.data.response.CreateResponse;
 import hu.tilos.radio.backend.data.response.OkResponse;
 import hu.tilos.radio.backend.data.response.UpdateResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -27,19 +28,19 @@ public class ShowController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = "/api/v1/show", method = RequestMethod.POST)
-    public CreateResponse create(@RequestBody ShowToSave show) {
+    public CreateResponse create(@RequestBody @Validated ShowToSave show) {
         return showService.create(show);
     }
 
     @PreAuthorize("hasRole('ROLE_AUTHOR')")
     @RequestMapping(value = "/api/v1/show/{alias}", method = RequestMethod.PUT)
-    public UpdateResponse update(@PathVariable String alias, @RequestBody ShowToSave show) {
+    public UpdateResponse update(@PathVariable String alias, @RequestBody @Validated ShowToSave show) {
         return showService.update(alias, show);
     }
 
     @PreAuthorize("hasRole('ROLE_AUTHOR')")
-    @RequestMapping(value = "/api/v1/news/file/{alias}", method = RequestMethod.POST)
-    public OkResponse contact(@PathVariable String alias, @RequestBody MailToShow mail) {
+    @RequestMapping(value = "/api/v1/show/{alias}/contact", method = RequestMethod.POST)
+    public OkResponse contact(@PathVariable String alias, @RequestBody @Validated  MailToShow mail) {
         return showService.contact(alias, mail);
     }
 }

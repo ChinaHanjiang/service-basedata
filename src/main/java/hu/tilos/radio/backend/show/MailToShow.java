@@ -1,16 +1,20 @@
 package hu.tilos.radio.backend.show;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class MailToShow {
 
     @NotNull
+    @Size(min = 3)
     private String from;
 
     @NotNull
+    @Size(min = 3)
     private String subject;
 
     @NotNull
+    @Size(min = 3)
     private String body;
 
     @NotNull
