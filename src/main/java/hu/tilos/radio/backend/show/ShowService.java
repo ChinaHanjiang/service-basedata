@@ -175,9 +175,9 @@ public class ShowService {
     }
 
     public OkResponse contact(String alias, MailToShow mailToSend) {
-//        if (!captchaValidator.validate("http://tilos.hu", mailToSend.getCaptchaChallenge(), mailToSend.getCaptchaResponse())) {
-//            throw new IllegalArgumentException("Rosszul megadott Captcha");
-//        }
+        if (!captchaValidator.validate("http://tilos.hu", mailToSend.getCaptchaChallenge(), mailToSend.getCaptchaResponse())) {
+            throw new IllegalArgumentException("Rosszul megadott Captcha");
+        }
         MimeMessage mail = mailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mail, false);
