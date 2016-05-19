@@ -37,6 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http
+                .authorizeRequests().antMatchers(HttpMethod.POST, "/api/**/contact").anonymous()
+                .and()
                 .authorizeRequests().antMatchers(HttpMethod.POST, "/api/**").authenticated()
                 .and()
                 .authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/**").authenticated()

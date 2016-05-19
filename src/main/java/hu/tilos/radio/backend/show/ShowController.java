@@ -37,8 +37,7 @@ public class ShowController {
     public UpdateResponse update(@PathVariable String alias, @RequestBody @Validated ShowToSave show) {
         return showService.update(alias, show);
     }
-
-    @PreAuthorize("hasRole('ROLE_AUTHOR')")
+    
     @RequestMapping(value = "/api/v1/show/{alias}/contact", method = RequestMethod.POST)
     public OkResponse contact(@PathVariable String alias, @RequestBody @Validated  MailToShow mail) {
         return showService.contact(alias, mail);

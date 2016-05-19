@@ -1,7 +1,8 @@
 package hu.tilos.radio.backend.show;
 
+import com.github.mkopylec.recaptcha.validation.RecaptchaValidator;
+import com.github.mkopylec.recaptcha.validation.ValidationResult;
 import com.mongodb.*;
-import hu.tilos.radio.backend.captcha.RecaptchaValidator;
 import hu.tilos.radio.backend.contribution.ShowContribution;
 import hu.tilos.radio.backend.converters.SchedulingTextUtil;
 import hu.tilos.radio.backend.data.error.InternalErrorException;
@@ -175,8 +176,9 @@ public class ShowService {
     }
 
     public OkResponse contact(String alias, MailToShow mailToSend) {
-        if (!captchaValidator.validate("http://tilos.hu", mailToSend.getCaptchaChallenge(), mailToSend.getCaptchaResponse())) {
-            throw new IllegalArgumentException("Rosszul megadott Captcha");
+        ValidationResult validate = captchaValidator.validate(mailToSend.getCaptcha());
+        if (!validate.isSuccess()) {
+            throw new IllegalArgumentException("Rosszul megadott Captcha: " + validate.toString());
         }
         MimeMessage mail = mailSender.createMimeMessage();
         try {

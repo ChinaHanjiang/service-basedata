@@ -18,10 +18,7 @@ public class MailToShow {
     private String body;
 
     @NotNull
-    private String captchaChallenge;
-
-    @NotNull
-    private String captchaResponse;
+    private String captcha;
 
     public String getFrom() {
         return from;
@@ -47,19 +44,12 @@ public class MailToShow {
         this.body = body;
     }
 
-    public String getCaptchaChallenge() {
-        return captchaChallenge;
+
+    public String getCaptcha() {
+        return captcha;
     }
 
-    public void setCaptchaChallenge(String captchaChallenge) {
-        this.captchaChallenge = captchaChallenge;
-    }
-
-    public String getCaptchaResponse() {
-        return captchaResponse;
-    }
-
-    public void setCaptchaResponse(String captchaResponse) {
-        this.captchaResponse = captchaResponse;
+    public void setCaptcha(String captcha) {
+        this.captcha = captcha;
     }
 }
