@@ -2,10 +2,7 @@ package hu.tilos.radio.backend.contribution;
 
 import hu.tilos.radio.backend.data.response.OkResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -18,7 +15,7 @@ public class ContributionController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = "/api/v1/contribution", method = RequestMethod.POST)
-    public String save(ContributionToSave contribution) throws IOException {
+    public String save(@RequestBody  ContributionToSave contribution) throws IOException {
         return contributionService.save(contribution);
     }
 

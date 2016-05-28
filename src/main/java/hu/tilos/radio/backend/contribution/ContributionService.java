@@ -46,10 +46,14 @@ public class ContributionService {
     public String save(ContributionToSave contributionToSave) {
         BasicDBObject authorQuery = new BasicDBObject("_id", new ObjectId(contributionToSave.getAuthor().getId()));
         DBObject author = db.getCollection("author").findOne(authorQuery);
-
+        if (author == null) {
+            throw new IllegalArgumentException("No such author" + contributionToSave.getAuthor().getId());
+        }
         BasicDBObject showQuery = new BasicDBObject("_id", new ObjectId(contributionToSave.getShow().getId()));
         DBObject show = db.getCollection("show").findOne(showQuery);
-
+        if (show == null) {
+            throw new IllegalArgumentException("No such author" + contributionToSave.getShow().getId());
+        }
         addContributionToAuthor(contributionToSave, authorQuery, author, show);
         addContributorToShow(contributionToSave, showQuery, author, show);
         return "ok";
