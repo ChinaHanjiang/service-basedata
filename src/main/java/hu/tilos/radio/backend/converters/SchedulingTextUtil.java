@@ -9,9 +9,9 @@ public class SchedulingTextUtil {
 
     public String create(SchedulingSimple scheduling) {
         StringBuilder response = new StringBuilder();
-        response.append("minden ");
+        response.append("");
         if (scheduling.getWeekType() == 2) {
-            response.append("második ");
+            response.append("minden második ");
         }
         String days[] = new String[]{"hétfő", "kedd", "szerda", "csütörtök", "péntek", "szombat", "vasárnap"};
 
