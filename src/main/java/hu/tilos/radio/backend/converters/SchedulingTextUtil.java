@@ -9,7 +9,6 @@ public class SchedulingTextUtil {
 
     public String create(SchedulingSimple scheduling) {
         StringBuilder response = new StringBuilder();
-        response.append("");
         if (scheduling.getWeekType() == 2) {
             response.append("minden második ");
         }
